@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Counter - State & Props</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="root"></div>
+<script type="text/babel">
+    const { useState } = React;
+
+    // Import components (for modularity demo)
+    function Counter(props) {
+      return React.createElement('div', { className: 'counter-container' },
+        React.createElement('h1', { 
+          className: 'counter-display',
+          onMouseEnter: (e) => e.target.classList.add('pulse'),
+          onMouseLeave: (e) => e.target.classList.remove('pulse')
+        }, props.count),
+        React.createElement('div', { className: 'buttons' },
+          React.createElement('button', { 
+            className: 'btn decrement', 
+            onClick: props.decrement 
+          }, '-'),
+          React.createElement('button', { 
+            className: 'btn reset', 
+            onClick: props.reset 
+          }, 'Reset'),
+          React.createElement('button', { 
+            className: 'btn increment', 
+            onClick: props.increment 
+          }, '+')
+        )
+      );
+    }
+
+    function App() {
+      const [count, setCount] = useState(0);
+
+      const increment = () => setCount(prev => prev + 1);
+      const decrement = () => setCount(prev => prev - 1);
+      const reset = () => setCount(0);
+
+      return React.createElement('div', { className: 'app' },
+        React.createElement('header', null,
+          React.createElement('h2', null, 'React Counter'),
+          React.createElement('p', null, 'decrement  | reset  | Increment ')
+        ),
+        React.createElement(Counter, { 
+          count, 
+          increment, 
+          decrement, 
+          reset 
+        })
+      );
+    }
+
+    // Mount app
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>

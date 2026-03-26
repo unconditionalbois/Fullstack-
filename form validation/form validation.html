@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 20px; background-color: #f4f4f9; }
+        .form-container { background: white; padding: 20px; border-radius: 8px; shadow: 0 2px 10px rgba(0,0,0,0.1); width: 300px; }
+        .input-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .error-msg { color: #dc3545; font-size: 0.8rem; height: 15px; margin-top: 4px; display: block; }
+        input.error { border-color: #dc3545; background-color: #fff8f8; }
+        button { width: 100%; padding: 10px; background: #007bff; border: none; color: white; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Register</h2>
+    <form id="registrationForm">
+        <div class="input-group">
+            <input type="text" id="name" placeholder="Full Name">
+            <small class="error-msg" id="nameError"></small>
+        </div>
+        
+        <div class="input-group">
+            <input type="text" id="email" placeholder="Email Address">
+            <small class="error-msg" id="emailError"></small>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="mobile" placeholder="Mobile (10 digits)">
+            <small class="error-msg" id="mobileError"></small>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+            <small class="error-msg" id="passwordError"></small>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+            <small class="error-msg" id="confirmError"></small>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('registrationForm');
+
+    form.addEventListener('submit', (e) => {
+        let isValid = true;
+        
+        // Grab values
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const mobile = document.getElementById('mobile');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        // Helper to show errors
+        const validate = (condition, element, message) => {
+            const errorElement = element.nextElementSibling;
+            if (condition) {
+                errorElement.innerText = message;
+                element.classList.add('error');
+                isValid = false;
+            } else {
+                errorElement.innerText = '';
+                element.classList.remove('error');
+            }
+        };
+
+        // Execution
+        validate(name.value.trim() === "", name, "Name is required");
+        validate(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value), email, "Invalid email format");
+        validate(!/^\d{10}$/.test(mobile.value), mobile, "Must be 10 digits");
+        validate(password.value.length < 8, password, "Min 8 characters");
+        validate(confirmPassword.value !== password.value || confirmPassword.value === "", confirmPassword, "Passwords don't match");
+
+        if (!isValid) {
+            e.preventDefault(); // Stop form submission if there are errors
+        } else {
+            alert("Form submitted successfully!");
+        }
+    });
+</script>
+
+</body>
+</html>
